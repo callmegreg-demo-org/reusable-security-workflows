@@ -120,6 +120,7 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         config-file: callmegreg-demo-org/my-reusable-workflows/.github/codeql-config.yml
+        external-repository-token: ${{ secrets.GITHUB_TOKEN }}
         
     # Autobuild attempts to build the application for CodeQL
     - name: Autobuild
