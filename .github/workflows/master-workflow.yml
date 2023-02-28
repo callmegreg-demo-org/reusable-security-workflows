@@ -119,7 +119,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-        config-file: ./.github/codeql-config.yml
+        config-file: callmegreg-demo-org/my-reusable-workflows/.github/codeql-config.yml
         
     # Autobuild attempts to build the application for CodeQL
     - name: Autobuild
