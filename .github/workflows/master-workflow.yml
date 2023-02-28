@@ -31,7 +31,8 @@ on:
 
 permissions: read-all
 
-jobs:      
+jobs:
+  # Build and scan the container image from a Dockerfile with Anchore
   anchore:
     if: ${{ inputs.skip-anchore == false }}
     name: Anchore
@@ -57,6 +58,7 @@ jobs:
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
   
+  # For PRs, scan for net new dependency vulnerabilities
   dependency-review:
     if: ${{ (inputs.skip-dependency-review == false) && (github.event_name == 'pull_request')}}
     name: Dependency Review
@@ -69,7 +71,7 @@ jobs:
         with:
           deny-licenses: GPL-3.0
   
-  # Automatically run TFSec 
+  # Automatically run TFSec to scan IaC
   tfsec:
     if: ${{ inputs.skip-tfsec == false }}
     name: tfsec
@@ -93,7 +95,7 @@ jobs:
         with:
           sarif_file: tfsec.sarif
   
-  # Run CodeQL Scan        
+  # Run CodeQL Scan
   codeql:
     if: ${{ inputs.skip-codeql == false }}
     name: CodeQL
@@ -112,11 +114,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Initializes the CodeQL tools for scanning.
+    # Initializes the CodeQL tools for scanning
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
+        config-file: ./.github/codeql-config.yml
         
     # Autobuild attempts to build the application for CodeQL
     - name: Autobuild
@@ -129,6 +132,8 @@ jobs:
       run: |
         echo "Run, Build Application using script"
         ${{ inputs.build-command }}
+    
+    # Analyze the CodeQL DB
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
