@@ -1,4 +1,4 @@
-name: "Centralized Code Scanning"
+name: "Centralized Security Scanning"
 
 on: 
   workflow_call:
