@@ -119,8 +119,8 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-        # config-file: callmegreg-demo-org/my-reusable-workflows/.github/codeql-config.yml@main
-        # external-repository-token: ${{ secrets.REPO_TOKEN }}
+        config-file: callmegreg-demo-org/my-reusable-workflows/.github/codeql-config.yml@main
+        external-repository-token: ${{ secrets.CENTRALIZED_SCANNING_TOKEN }}
         
     # Autobuild attempts to build the application for CodeQL
     - name: Autobuild
