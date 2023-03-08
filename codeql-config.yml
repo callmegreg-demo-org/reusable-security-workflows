@@ -14,8 +14,3 @@ query-filters:
       problem.severity:
         - warning
         - recommendation
-      
- paths-ignore: 
-  - src/node_modules
-  - '**/*.test.js'
-  - '**.md'
