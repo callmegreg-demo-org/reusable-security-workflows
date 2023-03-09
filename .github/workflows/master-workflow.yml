@@ -119,7 +119,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-        config-file: ${{ secrets.GITHUB_REPOSITORY }}/.github/codeql-config.yml@main
+        config-file: $GITHUB_REPOSITORY/.github/codeql-config.yml@main
         external-repository-token: ${{ secrets.READ_REPO_CONTENTS_TOKEN }}
         
     # Autobuild attempts to build the application for CodeQL
