@@ -1,4 +1,4 @@
-name: Centralized Security Scanning
+name: Regression Testing
 
 on:
   push:
