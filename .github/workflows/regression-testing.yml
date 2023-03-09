@@ -1,0 +1,18 @@
+name: Centralized Security Scanning
+
+on:
+  push:
+    branches: [ "main", "test" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+
+jobs:
+  scanning:
+    uses: callmegreg-demo-org/my-reusable-workflows/.github/workflows/master-workflow.yml@main
+    secrets: inherit
+    with:
+      languages: " [ 'javascript' ] "
+      # skip-tfsec: true
+      # skip-anchore: true
