@@ -1,0 +1,147 @@
+name: "Strict Security Scanning"
+
+on: 
+  workflow_call:
+    inputs:
+        # Used by CodeQL for unique build commands
+        build-command: 
+          required: false
+          type: string
+          default: ''
+
+permissions: read-all
+
+jobs:
+  # Determine which security scans are relevant
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.languages }}
+      docker: ${{ steps.
+    steps:
+      - name: Check for Dockerfile
+        id: dockerfile-check
+        run: |
+          pwd
+          ls
+          ls | grep "Dockerfile"
+          echo "DOCKERFILE=true" >> $GITHUB_OUTPUT
+      - name: Get languages from repo
+        id: set-matrix
+        uses: advanced-security/set-codeql-language-matrix@v1
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN  }}
+          endpoint: ${{ github.event.repository.languages_url }}
+
+  
+  # Build and scan the container image from a Dockerfile with Anchore
+  anchore:
+    if: ${{ inputs.skip-anchore == false }}
+    needs: setup
+    name: Anchore
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag localbuild/testimage:latest
+    - name: Run the Anchore Grype scan action
+      uses: anchore/scan-action@d5aa5b6cb9414b0c7771438046ff5bcfa2854ed7
+      id: scan
+      with:
+        image: "localbuild/testimage:latest"
+        fail-build: false
+        severity-cutoff: critical
+    - name: Upload vulnerability report
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: ${{ steps.scan.outputs.sarif }}
+  
+  # For PRs, scan for net new dependency vulnerabilities
+  dependency-review:
+    if: ${{ (inputs.skip-dependency-review == false) && (github.event_name == 'pull_request')}}
+    needs: setup
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v2
+        with:
+          deny-licenses: GPL-3.0
+  
+  # Automatically run TFSec to scan IaC
+  tfsec:
+    if: ${{ inputs.skip-tfsec == false }}
+    needs: setup
+    name: tfsec
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-sarif-action@v0.1.4
+        with:
+          sarif_file: tfsec.sarif
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: tfsec.sarif
+  
+  # Run CodeQL Scan
+  codeql:
+    if: ${{ inputs.skip-codeql == false }}
+    needs: setup
+    name: CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ${{ fromJSON(inputs.languages) }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Initializes the CodeQL tools for scanning
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        config-file: callmegreg-demo-org/my-reusable-workflows/.github/codeql-config.yml@main
+        external-repository-token: ${{ secrets.READ_REPO_CONTENTS_TOKEN }}
+        
+    # Autobuild attempts to build the application for CodeQL
+    - name: Autobuild
+      if: ${{ inputs.build-command == '' }}
+      uses: github/codeql-action/autobuild@v2
+
+    # If the Autobuild command fails, pass a build command to the workflow using 'build-command' input
+    - name: Custom Build Command
+      if: ${{ inputs.build-command != '' }}
+      run: |
+        echo "Run, Build Application using script"
+        ${{ inputs.build-command }}
+    
+    # Analyze the CodeQL DB
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{matrix.language}}"
