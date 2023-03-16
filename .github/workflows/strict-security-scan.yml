@@ -23,8 +23,8 @@ jobs:
         id: dockerfile-check
         run: |
           echo $(pwd)
-          echo $(ls)
-          echo $(ls | grep "Dockerfile")
+          echo $(ls ..)
+          echo $(ls .. | grep "Dockerfile")
           echo "DOCKERFILE=true" >> $GITHUB_OUTPUT
       - name: Get languages from repo
         id: set-matrix
