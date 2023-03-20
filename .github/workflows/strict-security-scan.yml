@@ -29,11 +29,11 @@ jobs:
         
       - name: Check for Dockerfile
         id: dockerfile-check
-        run: echo "DOCKERFILE=$(find . -name "Dockerfile")" >> "$GITHUB_OUTPUT"
+        run: echo "DOCKERFILE=$(find . -name 'Dockerfile')" >> "$GITHUB_OUTPUT"
         
       - name: Check for Terraform files
         id: terraform-check
-        run: echo "TERRAFORM=$(find . -name ".tf")" >> "$GITHUB_OUTPUT"
+        run: echo "TERRAFORM=$(find . -name '.tf')" >> "$GITHUB_OUTPUT"
           
       - name: Get languages from repo
         id: set-matrix
