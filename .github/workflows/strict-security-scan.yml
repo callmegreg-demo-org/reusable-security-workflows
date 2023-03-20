@@ -64,6 +64,8 @@ jobs:
       uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
+        fail-build: true
+        severity-cutoff: high
   
   # For PRs, scan for net new dependency vulnerabilities
   dependency-review:
