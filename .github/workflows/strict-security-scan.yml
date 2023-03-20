@@ -87,7 +87,7 @@ jobs:
       - name: 'Dependency Review'
         uses: actions/dependency-review-action@v2
         with:
-          deny-licenses: GPL-3.0+, AGPL-2.0+
+          deny-licenses: GPL-3.0-or-later # Possible values: https://spdx.org/licenses/
           fail-on-severity: moderate # Possible values: "critical", "high", "moderate", "low"
   
   # Automatically run TFSec to scan IaC
