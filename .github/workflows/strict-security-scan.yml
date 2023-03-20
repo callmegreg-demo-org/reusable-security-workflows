@@ -20,7 +20,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.languages }}
+      codeql-matrix: ${{ steps.set-matrix.outputs.languages }}
       docker: ${{ steps.dockerfile-check.outputs.DOCKERFILE }}
       terraform: ${{ steps.terraform-check.outputs.TERRAFORM }}
     steps:
@@ -128,7 +128,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ${{ fromJSON(needs.setup.outputs.matrix) }}
+        language: ${{ fromJSON(needs.setup.outputs.codeql-matrix) }}
 
     steps:
     - name: Setup Java
