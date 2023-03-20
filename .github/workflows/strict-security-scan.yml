@@ -8,6 +8,10 @@ on:
           required: false
           type: string
           default: ''
+        java-version:
+          required: false
+          type: string
+          default: ''
 
 permissions: read-all
 
@@ -114,9 +118,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ${{ fromJSON(inputs.languages) }}
+        language: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
 
     steps:
+    - name: Setup Java
+      if: ${{ inputs.java-version != '' }}
+      uses: actions/setup-java@v3.10.0
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: 'microsoft'
+    
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -124,7 +135,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        languages: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
+        languages: ${{ matrix.language }}
         config-file: callmegreg-demo-org/my-reusable-workflows/.github/codeql-config.yml@main
         external-repository-token: ${{ secrets.READ_REPO_CONTENTS_TOKEN }}
         
@@ -144,4 +155,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        category: "/language:${{matrix.language}}"
+        category: "/language:${{ matrix.language }}"
