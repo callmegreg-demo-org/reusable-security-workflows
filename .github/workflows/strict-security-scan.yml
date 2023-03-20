@@ -22,13 +22,18 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.languages }}
       docker: ${{ steps.dockerfile-check.outputs.DOCKERFILE }}
+      terraform: ${{ steps.terraform-check.outputs.TERRAFORM }}
     steps:
       - name: Check out the code
         uses: actions/checkout@v3
         
       - name: Check for Dockerfile
         id: dockerfile-check
-        run: echo "DOCKERFILE=$(ls | grep Dockerfile)" >> "$GITHUB_OUTPUT"
+        run: echo "DOCKERFILE=$(find . -name "Dockerfile")" >> "$GITHUB_OUTPUT"
+        
+      - name: Check for Terraform files
+        id: terraform-check
+        run: echo "TERRAFORM=$(find . -name ".tf")" >> "$GITHUB_OUTPUT"
           
       - name: Get languages from repo
         id: set-matrix
@@ -51,8 +56,10 @@ jobs:
     steps:
     - name: Check out the code
       uses: actions/checkout@v3
+      
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag localbuild/testimage:latest
+      
     - name: Run the Anchore Grype scan action
       uses: anchore/scan-action@v3.3.4
       id: scan
@@ -60,20 +67,23 @@ jobs:
         image: "localbuild/testimage:latest"
         fail-build: true
         severity-cutoff: medium
+        
     - name: Upload vulnerability report
+      if: ${{ success() || failure() }}
       uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
   
   # For PRs, scan for net new dependency vulnerabilities
   dependency-review:
-    if: ${{ (inputs.skip-dependency-review == false) && (github.event_name == 'pull_request')}}
+    if: ${{ github.event_name == 'pull_request' }}
     needs: setup
     name: Dependency Review
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v3
+        
       - name: 'Dependency Review'
         uses: actions/dependency-review-action@v2
         with:
@@ -81,7 +91,7 @@ jobs:
   
   # Automatically run TFSec to scan IaC
   tfsec:
-    if: ${{ inputs.skip-tfsec == false }}
+    if: ${{ needs.setup.outputs.terraform != '' }}
     needs: setup
     name: tfsec
     runs-on: ubuntu-latest
