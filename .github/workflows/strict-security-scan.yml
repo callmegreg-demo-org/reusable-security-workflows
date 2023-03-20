@@ -102,7 +102,7 @@ jobs:
   
   # Run CodeQL Scan
   codeql:
-    if: ${{ inputs.skip-codeql == false }}
+    if: ${{ needs.create-matrix.outputs.matrix != '[]' }}
     needs: setup
     name: CodeQL
     runs-on: ubuntu-latest
@@ -124,7 +124,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        languages: ${{ matrix.language }}
+        languages: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
         config-file: callmegreg-demo-org/my-reusable-workflows/.github/codeql-config.yml@main
         external-repository-token: ${{ secrets.READ_REPO_CONTENTS_TOKEN }}
         
