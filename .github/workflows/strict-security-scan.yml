@@ -65,7 +65,7 @@ jobs:
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
         fail-build: true
-        severity-cutoff: high
+        severity-cutoff: medium
   
   # For PRs, scan for net new dependency vulnerabilities
   dependency-review:
