@@ -10,9 +10,5 @@ on:
 
 jobs:
   scanning:
-    uses: callmegreg-demo-org/my-reusable-workflows/.github/workflows/master-workflow.yml@main
+    uses: callmegreg-demo-org/my-reusable-workflows/.github/workflows/strict-security-scan.yml@main
     secrets: inherit
-    with:
-      languages: " [ 'javascript' ] "
-      # skip-tfsec: true
-      # skip-anchore: true
