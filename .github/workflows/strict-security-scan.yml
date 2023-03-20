@@ -94,7 +94,7 @@ jobs:
   tfsec:
     if: ${{ needs.setup.outputs.terraform != '' }}
     needs: setup
-    name: tfsec
+    name: TFSec
     runs-on: ubuntu-latest
     permissions:
       actions: read
