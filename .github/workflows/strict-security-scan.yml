@@ -40,7 +40,7 @@ jobs:
   
   # Build and scan the container image from a Dockerfile with Anchore
   anchore:
-    if: ${{ needs.setup.outputs.DOCKERFILE == 'true' }}
+    if: ${{ needs.setup.outputs.docker == 'true' }}
     needs: setup
     name: Anchore
     permissions:
