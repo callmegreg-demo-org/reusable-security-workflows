@@ -29,7 +29,7 @@ jobs:
         
       - name: Check for Dockerfile
         id: dockerfile-check
-        run: echo "DOCKERFILE=$(ls -R | grep '\<Dockerfile\>')" >> "$GITHUB_OUTPUT"
+        run: echo "DOCKERFILE=$(ls | grep '\<Dockerfile\>')" >> "$GITHUB_OUTPUT"
         
       - name: Check for Terraform files
         id: terraform-check
