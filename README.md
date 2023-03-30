@@ -31,3 +31,10 @@ _Notable features:_
 - Ability to opt out of any of the testing capabilities
 - Ability to specify which languages should be scanned by CodeQL
 - No alert/severity based status check failures
+
+## Caller Workflow
+Workflow file: [regression-testing.yml](https://github.com/callmegreg-demo-org/my-reusable-workflows/blob/main/.github/workflows/regression-testing.yml)
+
+This is an example caller workflow that would be implemented by the downstream repositories that call your centralized workflow.
+
+`secrets:inherit` is only required if you would like to access **_caller_** repository secrets or organization secrets in the workflow run. It will **_not_** allow the caller workflow to access **_centralized_** repository secrets.
