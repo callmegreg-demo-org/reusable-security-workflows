@@ -19,7 +19,7 @@ This workflow demonstrates centralized control. It automatically detects relevan
 _Notable features:_
 - Only run applicable jobs
 - Applicable CodeQL languages are automatically detected and set
-- Each job is configured to fail on any `medium` severity or higher alerts
+- Where possible, jobs are configured to fail on any `medium` severity or higher alerts
 - The caller workflow can specify their java version
 
 ## Continuous Integration - Flexible
