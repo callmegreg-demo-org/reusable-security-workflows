@@ -1,4 +1,4 @@
-name: "Centralized Security Scanning"
+name: "Flexible Security Scanning"
 
 on: 
   workflow_call:
