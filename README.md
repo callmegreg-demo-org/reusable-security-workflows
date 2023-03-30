@@ -19,8 +19,10 @@ This workflow demonstrates centralized control. It automatically detects relevan
 _Notable features:_
 - Only run applicable jobs
 - Applicable CodeQL languages are automatically detected and set
-- Where possible, jobs are configured to fail on any `medium` severity or higher alerts
+- Where possible*, jobs are configured to fail on any `medium` severity or higher alerts
 - The caller workflow can specify their java version
+
+*The TFSec action used in this example has a hardcoded `--soft-fail` flag when running the `tfsec` command. I've opened [an issue](https://github.com/aquasecurity/tfsec-sarif-action/issues/41) to address this.
 
 ## Continuous Integration - Flexible
 Workflow file: [flexible-security-scan.yml](https://github.com/callmegreg-demo-org/my-reusable-workflows/blob/main/.github/workflows/flexible-security-scan.yml)
