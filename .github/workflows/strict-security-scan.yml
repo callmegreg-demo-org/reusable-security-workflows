@@ -118,7 +118,7 @@ jobs:
   
   # Run CodeQL Scan
   codeql:
-    if: ${{ needs.create-matrix.outputs.matrix != '[]' }}
+    if: ${{ needs.setup.outputs.codeql-matrix != '[]' }}
     needs: setup
     name: CodeQL
     runs-on: ubuntu-latest
