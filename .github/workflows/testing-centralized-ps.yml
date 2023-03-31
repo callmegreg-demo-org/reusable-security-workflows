@@ -7,5 +7,11 @@ jobs:
   myjob:
     runs-on: windows-latest
     steps:
-      - name: run script
-        run: ./callmegreg-demo-org/ps-scripts/main.ps1@main
+      - uses: actions/checkout@v3
+        with:
+          repository: callmegreg-demo-org/ps-scripts
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: ./main.ps1
+        shell: powershell
