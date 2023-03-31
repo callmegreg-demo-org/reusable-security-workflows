@@ -1,0 +1,106 @@
+name: "NowSecure - Mobile Security"
+
+on: 
+  workflow_call:
+    inputs:
+        # Used by CodeQL for unique build commands
+        build-command: 
+          required: false
+          type: string
+          default: ''
+        java-version:
+          required: false
+          type: string
+          default: ''
+        nowsecure-group-id:
+          required: true
+          type: string
+          
+permissions: read-all
+
+jobs:
+  # Build and upload an Android application as a build artifact
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ inputs.java-version }}
+          distribution: "microsoft"
+          cache: "gradle"
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Build application
+        run: ./gradlew assembleDebug --stacktrace --no-daemon
+
+      - name: Upload application
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          # NEED TO REPLACE HARDCODED UPLOAD PATH
+          path: ./app/build/outputs/apk/insecure/debug/app-insecure-debug.apk
+          retention-days: 3
+          
+  # Scan the Android application with NowSecure.
+  scan:
+    runs-on: ubuntu-latest
+    outputs:
+      report_id: ${{ steps.upload.outputs.report_id }}
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # NOTE: ripgrep is required for line-of-code identification.
+      - name: Install ripgrep
+        run: sudo apt-get install -y ripgrep
+
+      - name: Download application
+        uses: actions/download-artifact@v2
+        with:
+          name: app
+
+      - id: upload
+        name: NowSecure upload app
+        uses: nowsecure/nowsecure-action/upload-app@v3
+        with:
+          platform_token: ${{ secrets.NS_TOKEN }}
+          # NEED TO REPLACE HARDCODED FILE NAME
+          app_file: app-insecure-debug.apk
+          group_id: ${{ inputs.nowsecure-group-id }}
+
+  # Pulls the NowSecure report, converts it to SARIF and uploads it to code scanning.
+  upload-results:
+    if: ${{ needs.scan.outputs.report_id }}
+    runs-on: ubuntu-latest
+    environment:
+      name: nowsecure-env
+    needs: scan
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: NowSecure download report
+        uses: nowsecure/nowsecure-action/convert-sarif@v3
+        timeout-minutes: 60
+        with:
+          report_id: ${{ needs.scan.outputs.report_id }}
+          platform_token: ${{ secrets.NS_TOKEN }}
+          group_id: ${{ inputs.nowsecure-group-id }}
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: NowSecure.sarif
+
+      - name: Upload SARIF to artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: NowSecure.sarif
+          path: ./NowSecure.sarif
