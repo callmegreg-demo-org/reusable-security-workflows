@@ -10,5 +10,5 @@ on:
 
 jobs:
   scanning:
-    uses: callmegreg-demo-org/my-reusable-workflows/.github/workflows/strict-security-scan.yml@main
+    uses: callmegreg-demo-org/reusable-security-workflows/.github/workflows/strict-security-scan.yml@main
     secrets: inherit
