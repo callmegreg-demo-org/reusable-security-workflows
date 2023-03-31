@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: callmegreg-demo-org/ps-scripts@main
+          repository: callmegreg-demo-org/ps-scripts
           token: ${{ secrets.READ_PS_REPO_CONTENTS }}
 
       # Runs a single command using the runners shell
