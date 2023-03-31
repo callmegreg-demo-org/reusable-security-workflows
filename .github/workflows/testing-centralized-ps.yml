@@ -1,0 +1,10 @@
+name: "ps test"
+
+on:
+  workflow_call
+
+jobs:
+  myjob:
+    runs-on: windows-latest
+    steps:
+      run: ./callmegreg-demo-org/ps-scripts/main.ps1@main
