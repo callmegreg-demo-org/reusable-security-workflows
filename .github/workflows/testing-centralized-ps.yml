@@ -7,4 +7,5 @@ jobs:
   myjob:
     runs-on: windows-latest
     steps:
-      run: ./callmegreg-demo-org/ps-scripts/main.ps1@main
+      - name: run script
+        run: ./callmegreg-demo-org/ps-scripts/main.ps1@main
