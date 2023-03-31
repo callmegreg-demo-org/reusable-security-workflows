@@ -2,7 +2,7 @@
 This repo is intended to inspire the use of [reusable workflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows) to centralize security testing configuration.
 
 # Pre-requisites
-- Some of the jobs in the example workflows require [GitHub Advanced Security](https://docs.github.com/en/get-started/learning-about-github/about-github-advanced-security) to be enabled for private/internal repos.
+- The jobs in the example workflows require [GitHub Advanced Security](https://docs.github.com/en/get-started/learning-about-github/about-github-advanced-security) to be enabled on the caller repos.
 
 # Current capabilities
 - SAST with GitHub's [CodeQL](https://codeql.github.com/)
