@@ -28,9 +28,14 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v3
         
-      - name: Check for Terraform files
+      - name: Check for Android manifest file
         id: android-check
-        run: echo "ANDROID=$(ls -R | grep -F 'AndroidManifest')" >> "$GITHUB_OUTPUT"
+        run: |
+          if $(ls -R | grep -q 'AndroidManifest'); then
+              echo "ANDROID=true" >> "$GITHUB_OUTPUT"
+          else
+              echo "Android manifest file not found"
+          fi
   # Build and upload an Android application as a build artifact
   build:
     if: ${{ needs.setup.outputs.android != '' }}
