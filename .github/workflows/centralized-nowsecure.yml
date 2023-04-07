@@ -33,6 +33,7 @@ jobs:
       - name: Check for Android manifest file
         id: android-check
         run: |
+          echo "$(ls -R | grep 'AndroidManifest.xml' | wc -l) Android manifest files found."
           echo "ANDROID=$(ls -R | grep 'AndroidManifest.xml' | wc -l)" >> "$GITHUB_OUTPUT"
           
   # Build and upload an Android application as a build artifact
