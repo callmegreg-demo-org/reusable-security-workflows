@@ -34,6 +34,7 @@ jobs:
   # Build and upload an Android application as a build artifact
   build:
     if: ${{ needs.setup.outputs.android != '' }}
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
