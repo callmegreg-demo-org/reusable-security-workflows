@@ -30,7 +30,7 @@ jobs:
         
       - name: Check for Terraform files
         id: android-check
-        run: echo "ANDROID=$(ls -R | grep -F 'AndroidManifest.xml')" >> "$GITHUB_OUTPUT"
+        run: echo "ANDROID=$(ls -R | grep -F 'AndroidManifest')" >> "$GITHUB_OUTPUT"
   # Build and upload an Android application as a build artifact
   build:
     if: ${{ needs.setup.outputs.android != '' }}
