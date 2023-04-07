@@ -37,7 +37,7 @@ jobs:
           
   # Build and upload an Android application as a build artifact
   build:
-    if: ${{ needs.setup.outputs.android != '' }}
+    if: ${{ needs.setup.outputs.android != 0 }}
     needs: setup
     runs-on: ubuntu-latest
     steps:
