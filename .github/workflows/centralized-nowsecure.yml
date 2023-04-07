@@ -33,7 +33,7 @@ jobs:
       - name: Check for Android manifest file
         id: android-check
         run: |
-          if $(ls -R | grep 'AndroidManifest.xml'); then
+          if $(ls -R | grep -F 'AndroidManifest.xml'); then
               echo "ANDROID=true" >> "$GITHUB_OUTPUT"
           else
               echo "Android manifest file not found"
