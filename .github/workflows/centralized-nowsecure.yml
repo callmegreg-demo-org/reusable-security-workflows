@@ -33,11 +33,8 @@ jobs:
       - name: Check for Android manifest file
         id: android-check
         run: |
-          if [ -f "AndroidManifest.xml" ]; then
-              echo "ANDROID=true" >> "$GITHUB_OUTPUT"
-          else
-              echo "Android manifest file not found"
-          fi
+          echo "ANDROID=$(ls -R | grep 'AndroidManifest.xml' | wc -l)" >> "$GITHUB_OUTPUT"
+          
   # Build and upload an Android application as a build artifact
   build:
     if: ${{ needs.setup.outputs.android != '' }}
