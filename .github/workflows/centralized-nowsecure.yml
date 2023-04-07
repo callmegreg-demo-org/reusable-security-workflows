@@ -19,8 +19,21 @@ on:
 permissions: read-all
 
 jobs:
+  # Check for mobile files:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      android: ${{ steps.android-check.outputs.ANDROID }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+        
+      - name: Check for Terraform files
+        id: android-check
+        run: echo "ANDROID=$(ls -R | grep 'AndroidManifest.xml')" >> "$GITHUB_OUTPUT"
   # Build and upload an Android application as a build artifact
   build:
+    if: ${{ needs.setup.outputs.android != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
