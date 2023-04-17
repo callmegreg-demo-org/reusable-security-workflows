@@ -148,7 +148,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-        config-file: ./.github/codeql-config.yml@main
+        config-file: callmegreg-demo-org/reusable-security-workflows/.github/codeql-config.yml@main
         # external-repository-token: ${{ secrets.READ_REPO_CONTENTS_TOKEN }}
         
     # Autobuild attempts to build the application for CodeQL
