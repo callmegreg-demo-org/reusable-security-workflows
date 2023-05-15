@@ -19,6 +19,8 @@ jobs:
   # Determine which security scans are relevant
   setup:
     runs-on: ubuntu-latest
+    environment:
+      name: prod
     outputs:
       codeql-matrix: ${{ steps.set-matrix.outputs.languages }}
       docker: ${{ steps.dockerfile-check.outputs.DOCKERFILE }}
@@ -46,6 +48,8 @@ jobs:
   # Build and scan the container image from a Dockerfile with Anchore
   anchore:
     if: ${{ needs.setup.outputs.docker != '' }}
+    environment:
+      name: prod
     needs: setup
     name: Anchore
     permissions:
@@ -77,6 +81,8 @@ jobs:
   # For PRs, scan for net new dependency vulnerabilities
   dependency-review:
     if: ${{ github.event_name == 'pull_request' }}
+    environment:
+      name: prod
     needs: setup
     name: Dependency Review
     runs-on: ubuntu-latest
@@ -93,6 +99,8 @@ jobs:
   # Automatically run TFSec to scan IaC
   tfsec:
     if: ${{ needs.setup.outputs.terraform != '' }}
+    environment:
+      name: prod
     needs: setup
     name: TFSec
     runs-on: ubuntu-latest
@@ -119,6 +127,8 @@ jobs:
   # Run CodeQL Scan
   codeql:
     if: ${{ needs.setup.outputs.codeql-matrix != '[]' }}
+    environment:
+      name: prod
     needs: setup
     name: CodeQL
     runs-on: ubuntu-latest
