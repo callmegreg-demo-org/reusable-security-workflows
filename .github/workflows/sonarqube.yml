@@ -1,32 +1,3 @@
-Skip to content
- •    gh/queue/master/pr-316410-e3d8c86f91cbe336cda2ca57fe5596ee24c82405 🦴 🐈 github/actions 
-✨ Feedback Switch to  
-Rails 7.2.0.alpha.053470a
- | Ruby 3.3.0 | React 18.2.0
-callmegreg-demo-org
-/
-ghas-demo-repo
-
-Type / to search
-
-Code
-Issues
-1
-Pull requests
-13
-Actions
-Projects
-Wiki
-Security
-124
-Insights
-Settings
-SonarCloud analysis
-Update sonarcloud.yml #9
-Jobs
-Run details
-Workflow file for this run
-.github/workflows/sonarcloud.yml at b349e05
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
