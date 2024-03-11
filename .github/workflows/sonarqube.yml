@@ -66,4 +66,3 @@ jobs:
             -Dsonar.projectKey=${{ steps.extract_repo_name.outputs.repo_name }}
             -Dsonar.organization=${{ github.repository_owner }}
             -Dsonar.verbose=true # optional, default is false
-callmegreg-de... Part of Avocado Corp. 68 repositories 10 members Press escape to close this hovercard 
