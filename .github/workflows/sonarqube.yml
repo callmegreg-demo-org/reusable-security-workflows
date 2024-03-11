@@ -46,7 +46,7 @@ jobs:
     steps:
       - name: Extract Repo Name
         id: extract_repo_name
-        run: echo "repo_name=$(echo ${{ github.repository }} | sed 's/\//_/g'" >> "$GITHUB_OUTPUT"
+        run: echo "repo_name=$(echo ${{ github.repository }} | sed 's/\//_/g')" >> "$GITHUB_OUTPUT"
 
       - name: Display Repo Name
         run: echo "Repository Name ${{ steps.extract_repo_name.outputs.repo_name }}"
