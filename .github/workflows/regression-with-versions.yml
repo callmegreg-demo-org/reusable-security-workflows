@@ -1,0 +1,14 @@
+name: Regression Testing
+
+on:
+  push:
+    branches: [ "main", "test" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+
+jobs:
+  scanning:
+    uses: callmegreg-demo-org/reusable-security-workflows/.github/workflows/strict-security-scan.yml@11a7f65d35b0ed226c299d3f39fb9c816006f9f7 # v1.0.0
+    secrets: inherit
