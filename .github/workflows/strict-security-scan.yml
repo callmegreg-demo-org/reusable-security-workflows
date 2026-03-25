@@ -29,7 +29,7 @@ jobs:
       terraform: ${{ steps.terraform-check.outputs.TERRAFORM }}
     steps:
       - name: Check out the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         
       - name: Check for Dockerfile
         id: dockerfile-check
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out the code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
       
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag localbuild/testimage:latest
@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Repository'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         
       - name: 'Dependency Review'
         uses: actions/dependency-review-action@v4
@@ -107,7 +107,7 @@ jobs:
 
     steps:
       - name: Clone repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Run tfsec
         uses: aquasecurity/tfsec-sarif-action@v0.1.4
@@ -145,7 +145,7 @@ jobs:
         distribution: 'microsoft'
     
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
 
     # Initializes the CodeQL tools for scanning
     - name: Initialize CodeQL
