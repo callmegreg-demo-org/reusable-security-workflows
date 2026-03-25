@@ -74,7 +74,7 @@ jobs:
         
     - name: Upload vulnerability report
       if: ${{ success() || failure() }}
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
   
@@ -116,7 +116,7 @@ jobs:
 
       - name: Upload SARIF file
         if: ${{ success() || failure() }}
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: tfsec.sarif
   
@@ -149,7 +149,7 @@ jobs:
 
     # Initializes the CodeQL tools for scanning
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
         config: ${{ vars.CODEQL_CONFIG }}
@@ -159,7 +159,7 @@ jobs:
     # Autobuild attempts to build the application for CodeQL
     - name: Autobuild
       if: ${{ inputs.build-command == '' }}
-      uses: github/codeql-action/autobuild@v2
+      uses: github/codeql-action/autobuild@v4
 
     # If the Autobuild command fails, pass a build command to the workflow using 'build-command' input
     - name: Custom Build Command
@@ -170,6 +170,6 @@ jobs:
     
     # Analyze the CodeQL DB
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{ matrix.language }}"
