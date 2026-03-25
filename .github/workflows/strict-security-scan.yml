@@ -12,6 +12,10 @@ on:
           required: false
           type: string
           default: ''
+        new-options:
+          required: false
+          type: string
+          default: ''
 
 permissions: read-all
 
